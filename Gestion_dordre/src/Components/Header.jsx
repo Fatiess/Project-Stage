@@ -1,66 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+
 import { GrHomeRounded } from "react-icons/gr";
 import { BsDownload } from "react-icons/bs";
 import { BsUpload } from "react-icons/bs";
 import { MdLogin } from "react-icons/md";
+import { LuUser } from "react-icons/lu";
+
 import "../Styles/Header.css";
+
 import img from "../Images/vv.png";
-import Login from "../Pages/Login";
 
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleLoginPopup = () => {
-    setIsLoginOpen(!isLoginOpen);
-  };
-
-  const handleLogin = async (credentials) => {
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setIsAuthenticated(true);
-        setIsLoginOpen(false);
-        alert("Connexion réussie !");
-      } else {
-        alert("Identifiants incorrects !");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la connexion :", error);
+  useEffect(() => {
+    const cookieData = Cookies.get("authData");
+    if (cookieData) {
+      setUser(JSON.parse(cookieData));
     }
-  };
-
-  const handleSignup = async (userData) => {
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        alert("Inscription réussie !");
-        setIsLoginOpen(false);
-      } else {
-        alert("Erreur lors de l'inscription !");
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'inscription :", error);
-    }
-  };
+  }, []);
 
   return (
     <header>
@@ -68,51 +28,35 @@ function Header() {
         <img src={img} alt="Logo" width="70px" />
         <label>bureau d'ordre</label>
       </div>
-
-      <div
-        className={`hamburger ${isMenuOpen ? "active" : ""}`}
-        onClick={toggleMenu}
-      >
-        <div className="line"></div>
-        <div className="line"></div>
-        <div className="line"></div>
-      </div>
-
-      <div className={`nav-links ${isMenuOpen ? "active" : ""}`}>
-        <Link className="link" to="/" onClick={toggleMenu}>
+      <div className="nav-links">
+        <Link className="link" to="/">
           <GrHomeRounded /> Home
         </Link>
         <span></span>
-        <Link
-          className="link"
-          to={isAuthenticated ? "/arrivee" : "#"}
-          onClick={() => {
-            if (!isAuthenticated) {
-              toggleLoginPopup();
-            }
-          }}
-        >
+        <Link className="link" to="/arrivee">
           <BsDownload /> Arrivée
         </Link>
         <span></span>
-        <Link
-          className="link"
-          to={isAuthenticated ? "/depart" : "#"}
-          onClick={() => {
-            if (!isAuthenticated) {
-              toggleLoginPopup();
-            }
-          }}
-        >
+        <Link className="link" to="/depart">
           <BsUpload /> Départ
         </Link>
-        <span></span>
-        <button className="link login-link" onClick={toggleLoginPopup}>
-          <MdLogin /> Se Connecter
-        </button>
       </div>
-
-      {isLoginOpen && <Login toggle={toggleLoginPopup} onLogin={handleLogin} onSignup={handleSignup} />}
+      <div className="nav-links">
+        {user ? (
+          <div className="spany11">
+            <p className="login-admin" to="/login">
+              <LuUser /> {user.user.username}
+            </p>
+            <div className="logout-btn" to="/login">
+              <div /> Déconnexion
+            </div>
+          </div>
+        ) : (
+          <Link className="link login-link" to="/login">
+            <MdLogin /> Se Connecter
+          </Link>
+        )}
+      </div>
     </header>
   );
 }

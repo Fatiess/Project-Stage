@@ -25,7 +25,7 @@ header {
 
 .logos img {
   border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .logos label {
@@ -33,7 +33,7 @@ header {
   text-transform: uppercase;
   font-weight: 500;
   letter-spacing: 1px;
-  color: #3c3c3c;
+  color: #001e51;
   border-left: 1px solid #3c3c3c6a;
   padding-left: 2rem;
 }
@@ -68,20 +68,59 @@ header {
   gap: 0.7rem;
 }
 
+.login-admin {
+  color: #1e517d;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.5rem;
+  padding-inline: 1.3rem;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid #1e517d;
+  border-right: none;
+}
+
+.logout-btn {
+  color: #ffffff;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  padding: 0.5rem;
+  padding-inline: 1.3rem;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid #2972b2fb;
+  background-color: #2972b2fb;
+  cursor: pointer;
+}
+.spany11 {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .link:hover {
   background-color: #2972b235;
   color: #104a7c;
 }
 
-
 .login-link {
-  background-color: rgb(15, 136, 15);
-  color: white;
+  background-color: #0f880f;
+  color: #ffffff;
 }
 
 .login-link:hover {
-  background-color: rgb(12, 124, 12); 
-  color: #fff;
+  background-color: #2972b2fb;
+  color: #ffffff;
 }
 
 /* Styles pour le menu hamburger */
@@ -131,6 +170,6 @@ header {
   }
 
   .nav-links span {
-    display:none;
+    display: none;
   }
 }

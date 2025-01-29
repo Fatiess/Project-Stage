@@ -10,7 +10,7 @@ import { RiUploadCloud2Fill } from "react-icons/ri";
 // Fonction principale
 function Depart() {
   const today = new Date();
-  const currentDate = today.toISOString().split('T')[0];
+  const currentDate = today.toISOString().split("T")[0];
   const [departList, setDepartList] = useState([]);
   const [years, setYears] = useState([]);
 
@@ -42,7 +42,9 @@ function Depart() {
 
   const fetchDepart = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/depart`, { params: { year: selectedYear } });
+      const response = await axios.get(`http://localhost:8887/depart`, {
+        params: { year: selectedYear },
+      });
       setDepartList(response.data);
     } catch (error) {
       console.error("Error fetching depart:", error);
@@ -51,7 +53,7 @@ function Depart() {
 
   const fetchYears = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/depart/years`);
+      const response = await axios.get(`http://localhost:8887/depart/years`);
       setYears(response.data);
     } catch (error) {
       console.error("Error fetching years:", error);
@@ -80,8 +82,14 @@ function Depart() {
   const getNumbr = (data) => {
     const currentYear = new Date().getFullYear();
     return data
-      .filter((item) => new Date(item.date_depart).getFullYear() === currentYear)
-      .reduce((max, item) => (item.num_dordre_depart > max ? item.num_dordre_depart : max), 0);
+      .filter(
+        (item) => new Date(item.date_depart).getFullYear() === currentYear
+      )
+      .reduce(
+        (max, item) =>
+          item.num_dordre_depart > max ? item.num_dordre_depart : max,
+        0
+      );
   };
 
   const handleFileChange = (event) => {
@@ -91,7 +99,9 @@ function Depart() {
 
     if (selectedFile) {
       if (!allowedTypes.includes(selectedFile.type)) {
-        alert("Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou PDF.");
+        alert(
+          "Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou PDF."
+        );
         event.target.value = null;
         setImg(null);
         setSelectedFileName("");
@@ -99,7 +109,9 @@ function Depart() {
       }
 
       if (selectedFile.size > maxSize) {
-        alert("Le fichier est trop volumineux. La taille maximale est de 20 Mo.");
+        alert(
+          "Le fichier est trop volumineux. La taille maximale est de 20 Mo."
+        );
         event.target.value = null;
         setImg(null);
         setSelectedFileName("");
@@ -129,7 +141,7 @@ function Depart() {
 
       let response;
       if (add) {
-        response = await axios.post("http://localhost:8082/depart", formData, {
+        response = await axios.post("http://localhost:8887/depart", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -138,7 +150,7 @@ function Depart() {
         formData.append("id", selected.num_dordre_depart);
 
         response = await axios.put(
-          `http://localhost:8082/depart/${selected.num_dordre_depart}`,
+          `http://localhost:8887/depart/${selected.num_dordre_depart}`,
           formData,
           {
             headers: {
@@ -161,11 +173,13 @@ function Depart() {
   };
 
   const deleteDepart = async (id) => {
-    const isConfirmed = window.confirm("Êtes-vous sûr de vouloir supprimer ce départ ?");
+    const isConfirmed = window.confirm(
+      "Êtes-vous sûr de vouloir supprimer ce départ ?"
+    );
     if (!isConfirmed) return;
 
     try {
-      await axios.delete(`http://localhost:8082/depart/${id}`);
+      await axios.delete(`http://localhost:8887/depart/${id}`);
       fetchDepart();
       alert("Départ supprimé avec succès.");
     } catch (error) {
@@ -202,9 +216,7 @@ function Depart() {
 
   const filteredDepartList = errorMessage
     ? departList
-    : departList.filter((dp) =>
-        dp.objet.toLowerCase().includes(searchTerm)
-      );
+    : departList.filter((dp) => dp.objet.toLowerCase().includes(searchTerm));
 
   return (
     <main>
@@ -221,14 +233,23 @@ function Depart() {
             />
             <IoSearchCircle className="serico" />
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-            <select id="year-select" className="SelectAn" value={selectedYear} onChange={handleYearChange}>
+            <select
+              id="year-select"
+              className="SelectAn"
+              value={selectedYear}
+              onChange={handleYearChange}
+            >
               <option value="">Toutes les années</option>
               {years.length > 0 ? (
                 years.map((year) => (
-                  <option key={year} value={year}>{year}</option>
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
                 ))
               ) : (
-                <option value="" disabled>Aucune année disponible</option>
+                <option value="" disabled>
+                  Aucune année disponible
+                </option>
               )}
             </select>
           </div>
@@ -297,7 +318,7 @@ function Depart() {
               <div className={add ? "inp6" : "inp7"}>
                 {edit && selected.file_path ? (
                   <object
-                    data={`http://localhost:8807${selected.file_path}`}
+                    data={`http://localhost:8887${selected.file_path}`}
                     width="100%"
                     height={inspect ? "600px" : "100px"}
                   ></object>
@@ -318,7 +339,7 @@ function Depart() {
                   </div>
                 </label>
                 {selectedFileName && (
-                  <p>
+                  <p className="opky5">
                     <span className="llmm6">{selectedFileName}</span>
                   </p>
                 )}
@@ -359,9 +380,7 @@ function Depart() {
                   {dp.file_path ? "1" : "- - -"}
                 </span>
                 <span className="cl column1">{dp.num_dordre_depart}</span>
-                <span className="cl column2">
-                  {formatDate(dp.date_depart)}
-                </span>
+                <span className="cl column2">{formatDate(dp.date_depart)}</span>
                 <span className="cl column3">{dp.destinataire}</span>
                 <span className="cl column4">{dp.objet}</span>
                 <span className="cl column5 ui">

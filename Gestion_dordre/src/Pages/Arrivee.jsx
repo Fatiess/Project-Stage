@@ -11,12 +11,13 @@ import { IoSearchCircle } from "react-icons/io5";
 import { RiUploadCloud2Fill } from "react-icons/ri";
 
 // Fonction principale
-function Arrivee() {
-  const today = new Date();
-  const currentDate = today.toISOString().split('T')[0];
-  const [arriveeList, setArriveeList] = useState([]);
-  const [years , setYears] = useState([]);
+function Arrivee(props) {
+  const user = props.userToken;
 
+  const today = new Date();
+  const currentDate = today.toISOString().split("T")[0];
+  const [arriveeList, setArriveeList] = useState([]);
+  const [years, setYears] = useState([]);
 
   const [selected, setSelected] = useState(null);
   const [add, setAdd] = useState(false);
@@ -24,9 +25,7 @@ function Arrivee() {
   const [inspect, setInspect] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedYear,setSelectedYear] = useState("");
-
-  
+  const [selectedYear, setSelectedYear] = useState("");
 
   const [dateA, setDateA] = useState(currentDate);
   const [dateL, setDateL] = useState("");
@@ -41,28 +40,29 @@ function Arrivee() {
     const extractYearsFromDates = () => {
       // Create a Set to store unique years
       const yearSet = new Set();
-  
+
       // Iterate through the arriveeList array
       arriveeList.forEach((item) => {
         // Extract the year from the date_darrivee property
         const year = new Date(item.date_darrivee).getFullYear();
-  
+
         // Add the year to the Set
         yearSet.add(year);
       });
-  
+
       // Convert the Set to an array, sort it, and update the state
       setYears(Array.from(yearSet).sort((a, b) => a - b));
     };
-  
+
     extractYearsFromDates();
   }, [arriveeList]); // This useEffect runs whenever arriveeList changes
-
 
   // Fonction pour récupérer les données d'arrivée
   const fetcharrive = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/arrivee`,{params:{year:selectedYear}});
+      const response = await axios.get(`http://localhost:8887/arrivee`, {
+        params: { year: selectedYear },
+      });
       setArriveeList(response.data);
     } catch (error) {
       console.error("Error fetching arrive:", error);
@@ -73,7 +73,7 @@ function Arrivee() {
 
   const fetchYears = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/arrivee/years`);
+      const response = await axios.get(`http://localhost:8887/arrivee/years`);
       setYears(response.data); // Stocker les années dans l'état
     } catch (error) {
       console.error("Error fetching years:", error);
@@ -126,7 +126,9 @@ function Arrivee() {
 
     if (selectedFile) {
       if (!allowedTypes.includes(selectedFile.type)) {
-        alert("Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou PDF.");
+        alert(
+          "Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou PDF."
+        );
         event.target.value = null;
         setImg(null);
         setSelectedFileName("");
@@ -134,7 +136,9 @@ function Arrivee() {
       }
 
       if (selectedFile.size > maxSize) {
-        alert("Le fichier est trop volumineux. La taille maximale est de 20 Mo.");
+        alert(
+          "Le fichier est trop volumineux. La taille maximale est de 20 Mo."
+        );
         event.target.value = null;
         setImg(null);
         setSelectedFileName("");
@@ -150,7 +154,6 @@ function Arrivee() {
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
   };
-  
 
   // Soumission du formulaire d'arrivée
   const arriveePost = async (e) => {
@@ -174,7 +177,7 @@ function Arrivee() {
         const nextOrderNumber = getNumbr(arriveeList) + 1;
         formData.append("nbr", nextOrderNumber);
 
-        response = await axios.post("http://localhost:8082/arrivee", formData, {
+        response = await axios.post("http://localhost:8887/arrivee", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -184,7 +187,7 @@ function Arrivee() {
         formData.append("id", selected.id_arrivee);
 
         response = await axios.put(
-          `http://localhost:8082/arrivee/${selected.id_arrivee}`,
+          `http://localhost:8887/arrivee/${selected.id_arrivee}`,
           formData,
           {
             headers: {
@@ -206,7 +209,6 @@ function Arrivee() {
     }
   };
 
-
   // Suppression d'une arrivée
   const deleteArrivee = async (id) => {
     const isConfirmed = window.confirm(
@@ -215,7 +217,7 @@ function Arrivee() {
     if (!isConfirmed) return;
 
     try {
-      await axios.delete(`http://localhost:8082/arrive/${id}`);
+      await axios.delete(`http://localhost:8887/arrive/${id}`);
       fetcharrive();
       alert("Arrivée supprimée avec succès.");
     } catch (error) {
@@ -256,16 +258,15 @@ function Arrivee() {
     const value = e.target.value.toLowerCase(); // Convertir en minuscules pour une recherche insensible à la casse
     setSearchTerm(value);
   };
-  
+
   // Filtrer les résultats en fonction de la recherche
   const filteredArriveeList = errorMessage
     ? arriveeList
-    : arriveeList.filter((ar) =>
-        ar.num_dordre_arrivee.toString().includes(searchTerm) || // Recherche par numéro d'ordre
-        ar.objet.toLowerCase().includes(searchTerm) // Recherche par objet
+    : arriveeList.filter(
+        (ar) =>
+          ar.num_dordre_arrivee.toString().includes(searchTerm) || // Recherche par numéro d'ordre
+          ar.objet.toLowerCase().includes(searchTerm) // Recherche par objet
       );
-  
-
 
   return (
     <main>
@@ -282,15 +283,24 @@ function Arrivee() {
             />
             <IoSearchCircle className="serico" />
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-            <select id="year-select" className="SelectAn" value={selectedYear} onChange={handleYearChange}>
+            <select
+              id="year-select"
+              className="SelectAn"
+              value={selectedYear}
+              onChange={handleYearChange}
+            >
               <option value="">Toutes les années</option>
-                {years.length > 0 ? (
-              years.map((year) => (
-            <option key={year} value={year}>{year}</option>
-            ))
-            ) : (
-            <option value="" disabled>Aucune année disponible</option>
-            )}
+              {years.length > 0 ? (
+                years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  Aucune année disponible
+                </option>
+              )}
             </select>
           </div>
           <button
@@ -377,7 +387,7 @@ function Arrivee() {
               <div className={add ? "inp6" : "inp7"}>
                 {edit && selected.file_path ? (
                   <object
-                    data={`http://localhost:8082${selected.file_path}`}
+                    data={`http://localhost:8887${selected.file_path}`}
                     width="100%"
                     height={inspect ? "600px" : "100px"}
                   ></object>
@@ -398,7 +408,7 @@ function Arrivee() {
                   </div>
                 </label>
                 {selectedFileName && (
-                  <p>
+                  <p className="opky5">
                     <span className="llmm6">{selectedFileName}</span>
                   </p>
                 )}

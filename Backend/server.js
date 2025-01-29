@@ -9,6 +9,14 @@ const fs = require("fs");
 const path = require("path");
 const app = express();
 const multer = require("multer");
+const bcrypt = require("bcrypt");
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+// Function to hash password when creating a user
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+}
 
 app.use(
   cors({
@@ -48,7 +56,6 @@ const db = mysql.createPool({
   database: "gestion_bureau_dordre",
   timezone: "Z",
 });
-
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -146,7 +153,7 @@ app.post("/arrivee", (req, res) => {
 });
 
 app.get("/arrivee", (req, res) => {
-  const { year } = req.query; 
+  const { year } = req.query;
 
   let sql = `
     SELECT * 
@@ -268,16 +275,6 @@ app.delete("/arrive/:id", (req, res) => {
   });
 });
 
-
-app.listen(8082, "0.0.0.0", () => {
-  const sql = "SELECT * FROM arrivee";
-  db.query(sql, (err, data) => {
-    if (err) return console.log("Cannot connect to Database...");
-    return console.log("Database connected pour arrivee...");
-  });
-});
-
-
 // ---------------------------- Depart ----------------------------------------------------
 
 // Route pour ajouter un départ
@@ -374,7 +371,8 @@ app.get("/depart", (req, res) => {
 
 // Route pour récupérer les années distinctes des départs
 app.get("/depart/years", (req, res) => {
-  const sql = "SELECT DISTINCT YEAR(date_depart) as year FROM depart ORDER BY year DESC";
+  const sql =
+    "SELECT DISTINCT YEAR(date_depart) as year FROM depart ORDER BY year DESC";
   db.query(sql, (err, data) => {
     if (err) return res.status(500).json({ error: err.message });
     return res.json(data.map((row) => row.year));
@@ -432,7 +430,14 @@ app.put("/depart/:id", (req, res) => {
     WHERE num_dordre_depart = ?
   `;
 
-  const values = [dateDepart, destinataire, objet, numOrdreDepart, filePath, id];
+  const values = [
+    dateDepart,
+    destinataire,
+    objet,
+    numOrdreDepart,
+    filePath,
+    id,
+  ];
 
   db.query(updateQuery, values, (err, result) => {
     if (err) {
@@ -476,11 +481,82 @@ app.delete("/depart/:id", (req, res) => {
   });
 });
 
-// Démarrer le serveur
+// --------------------------------------------------------------
+app.post("/register", async (req, res) => {
+  try {
+    const { username, password, privileges } = req.body;
+    const hashedPassword = await hashPassword(password); // Hash the password
+
+    const sql =
+      "INSERT INTO users (username, password, privileges) VALUES (?, ?, ?)";
+    db.query(sql, [username, hashedPassword, privileges], (err, result) => {
+      if (err) {
+        console.error("Registration error:", err);
+        return res.status(500).json({ error: "Error registering user" });
+      }
+      res.json({ message: "User registered successfully" });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ error: "Username and password are required" });
+    }
+
+    const sql =
+      "SELECT user_id, username, password, privileges FROM users WHERE username = ?";
+    db.query(sql, [username], async (err, results) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ error: "Server error" });
+      }
+
+      const user = results[0];
+      if (!user) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      const token = jwt.sign(
+        {
+          user_id: user.user_id,
+          username: user.username,
+          privileges: user.privileges,
+        },
+        JWT_SECRET,
+        { expiresIn: "30d" }
+      );
+
+      res.json({
+        token,
+        user: {
+          user_id: user.user_id,
+          username: user.username,
+          privileges: user.privileges,
+        },
+      });
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.listen(8887, "0.0.0.0", () => {
   const sql = "SELECT * FROM depart";
   db.query(sql, (err, data) => {
     if (err) return console.log("Cannot connect to Database...");
-    return console.log("Database connected pour depart...");
+    return console.log("Database connected ...");
   });
 });

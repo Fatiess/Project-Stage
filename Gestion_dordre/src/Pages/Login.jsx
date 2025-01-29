@@ -1,173 +1,97 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+
+import img1 from "../Images/bureau.jpg";
+import { TbArrowBackUp } from "react-icons/tb";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import "../Styles/Login.css";
 
-function Login(props) {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [isLogin, setIsLogin] = useState(true); // État pour basculer entre connexion et inscription
-  const [error, setError] = useState(""); // État pour afficher les erreurs
+  const [passShow, setPassShow] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Réinitialiser les erreurs
+    setError("");
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: "include", // Inclure les cookies
+      const response = await axios.post("http://localhost:8887/login", {
+        username,
+        password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Login successful:", data);
-        props.onLogin(data); // Appeler la fonction parente pour mettre à jour l'état de l'application
-        props.toggle(); // Fermer le popup
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || "Erreur de connexion");
-      }
-    } catch (err) {
-      setError("Erreur réseau ou serveur");
-      console.error("Login error:", err);
-    }
-  };
+      // Store everything in one cookie
+      const data = {
+        token: response.data.token,
+        user: response.data.user,
+      };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setError(""); // Réinitialiser les erreurs
+      Cookies.set("authData", JSON.stringify(data), { expires: 7 });
 
-    try {
-      const response = await fetch("http://localhost:5000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, email, password }),
-        credentials: "include", // Inclure les cookies
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Signup successful:", data);
-        props.onSignup(data); // Appeler la fonction parente pour mettre à jour l'état de l'application
-        props.toggle(); // Fermer le popup
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || "Erreur d'inscription");
-      }
-    } catch (err) {
-      setError("Erreur réseau ou serveur");
-      console.error("Signup error:", err);
+      navigate("/");
+    } catch (error) {
+      setError(
+        error.response?.data?.error || "Login failed. Please try again."
+      );
     }
   };
 
   return (
-    <div className="popup">
-      <div className="popup-inner">
-        <div className="image-side"></div>
-
-        <div className="form-side">
-          <h2>{isLogin ? "Se connecter" : "Inscription"}</h2>
-          <p>
-            {isLogin
-              ? "Veuillez vous connecter pour avoir plus."
-              : "Créez un compte pour accéder à votre espace personnel."}
-          </p>
-
-          {error && <p style={{ color: "red" }}>{error}</p>}
-
-          {isLogin ? (
-            // Formulaire de connexion
-            <form onSubmit={handleLogin}>
-              <label>
-                Nom d'utilisateur:
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Mot de passe:
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </label>
-              <button type="submit">Se Connecter</button>
-            </form>
-          ) : (
-            // Formulaire d'inscription
-            <form onSubmit={handleSignup}>
-              <label>
-                Nom d'utilisateur:
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Mot de passe:
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Confirmez le mot de passe:
-                <input type="password" required />
-              </label>
-              <button type="submit">S'inscrire</button>
-            </form>
-          )}
-
-          <p>
-            {isLogin ? (
-              <>
-                Vous n'avez pas de compte ?{" "}
-                <span
-                  style={{ color: "#007bff", cursor: "pointer" }}
-                  onClick={() => setIsLogin(false)}
-                >
-                  Inscrivez-vous ici.
-                </span>
-              </>
-            ) : (
-              <>
-                Vous avez déjà un compte ?{" "}
-                <span
-                  style={{ color: "#007bff", cursor: "pointer" }}
-                  onClick={() => setIsLogin(true)}
-                >
-                  Connectez-vous ici.
-                </span>
-              </>
-            )}
-          </p>
-
-          <button onClick={props.toggle}>Fermer</button>
+    <div className="login-container">
+      <div className="login">
+        <div className="l-img">
+          <img alt="Login-img" src={img1} width="350px" />
         </div>
+        <form className="form2" onSubmit={handleSubmit}>
+          <h1>bureau d'ordre login page</h1>
+          <div className="inpu-lab22">
+            <input
+              required
+              value={username}
+              minLength={4}
+              onChange={(e) => setUsername(e.target.value)}
+              type="text"
+              className="inp226"
+              placeholder=""
+            />
+            <label className="lab55">Nom d'utilisateur</label>
+          </div>
+          <div className="inpu-lab22">
+            <input
+              required
+              value={password}
+              minLength={6}
+              onChange={(e) => setPassword(e.target.value)}
+              type={passShow ? "text" : "password"}
+              className="inp226"
+              placeholder=""
+            />
+            {passShow ? (
+              <MdVisibility
+                onClick={() => setPassShow(!passShow)}
+                className="visible22"
+              />
+            ) : (
+              <MdVisibilityOff
+                onClick={() => setPassShow(!passShow)}
+                className="visible22"
+              />
+            )}
+            <label className="lab55">Mot de passe</label>
+          </div>
+          <input type="submit" value="LogIn" className="login-btn22" />
+
+          {error && <p className="error-message">{error}</p>}
+
+          <Link className="back22" to="/">
+            <TbArrowBackUp /> Retour à la page d'accueil
+          </Link>
+        </form>
       </div>
     </div>
   );
