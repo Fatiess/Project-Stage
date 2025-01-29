@@ -1,0 +1,137 @@
+.home {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* Slider */
+  /* Slider */
+  .slider {
+    position: relative;
+    height: 500px; /* Hauteur augmentée */
+    background: url('../Images/delegation.jpeg') no-repeat center center/cover; /* Chemin corrigé */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+  }
+  
+  .slider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Transparence pour un meilleur contraste */
+    z-index: 1;
+  }
+  
+  .slider-overlay {
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 2s ease-in-out; /* Animation d'apparition pour l'ensemble */
+  }
+  
+  .slider h1 {
+    font-size: 3rem; /* Texte plus grand */
+    font-weight: bold;
+    margin: 0;
+    animation: slideIn 1.5s ease-in-out; /* Animation spécifique au titre */
+  }
+  
+  .slider p {
+    font-size: 1.5rem; /* Texte plus grand pour correspondre à la hauteur */
+    margin-top: 20px;
+    animation: fadeIn 2s ease-in-out 0.5s; /* Animation avec un léger délai */
+  }
+  
+  /* Définition des animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  /* Services Section */
+  .services {
+    padding: 50px 20px;
+    background: #f9f9f9;
+    text-align: center;
+  }
+  
+  .services h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  
+  .service-cards {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .service-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    text-align: center;
+  }
+  
+  
+  .service-card i {
+    font-size: 3rem; /* Taille de l'icône */
+    color: #0671dd;
+    margin-bottom: 15px; /* Espacement entre l'icône et le titre */
+  }
+  
+  .service-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+  /* Expertise Section */
+  .expertise {
+    padding: 50px 20px;
+    text-align: center;
+  }
+  .expertise h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .expertise-list {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .expertise-item {
+    text-align: center;
+    width: 120px;
+  }
+  .expertise-item i {
+    font-size: 2rem;
+    color: #0671dd;
+  }
+  .expertise-item p {
+    margin-top: 5px;
+  }

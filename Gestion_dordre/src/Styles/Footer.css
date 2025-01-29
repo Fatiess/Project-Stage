@@ -1,0 +1,52 @@
+.footer {
+    background-color: #5e5e5e; /* Couleur de fond du footer */
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .footer h3 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+  }
+  
+  .footer p {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  
+  .footer .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Alignement vertical centré */
+    gap: 10px; /* Réduit l'espace entre le texte et l'icône */
+    margin-top: 20px;
+  }
+  
+  .footer .social-text {
+    font-size: 1rem; /* Taille du texte pour qu'il s'aligne avec l'icône */
+  }
+  
+  .footer .social-icons a {
+    font-size: 2rem;
+    color: white;
+    transition: color 0.3s ease;
+  }
+  
+  .footer .social-icons a:hover {
+    color: #0671dd; /* Changer la couleur lors du survol */
+  }
+  
+  .footer-bottom p {
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .footer .footer-bottom {
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #c7c7c7;
+  }
