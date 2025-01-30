@@ -6,6 +6,7 @@ import "./Styles/index.css";
 import App from "./Pages/App";
 import Arrivee from "./Pages/Arrivee";
 import Depart from "./Pages/Depart";
+import Login from "./Pages/Login";
 
 const AppWrapper = () => {
   const [user, setUser] = useState(null);
@@ -20,9 +21,10 @@ const AppWrapper = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<App userToken={user} />} />
+        <Route path="/" element={<App />} />
         <Route path="/arrivee" element={<Arrivee userToken={user} />} />
         <Route path="/depart" element={<Depart userToken={user} />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );

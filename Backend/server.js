@@ -12,7 +12,7 @@ const multer = require("multer");
 const bcrypt = require("bcrypt");
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-// Function to hash password when creating a user
+
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
