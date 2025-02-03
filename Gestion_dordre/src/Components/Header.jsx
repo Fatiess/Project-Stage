@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import { GrHomeRounded } from "react-icons/gr";
+import { RiAdminLine } from "react-icons/ri";
 import { BsDownload } from "react-icons/bs";
 import { BsUpload } from "react-icons/bs";
 import { MdLogin } from "react-icons/md";
@@ -50,6 +51,16 @@ function Header() {
               <BsUpload /> Départ
             </Link>
           </>
+        ) : null}
+        {user ? (
+          user.user.privileges === 1 ? (
+            <>
+              <span></span>
+              <Link className="link" to="/admin">
+                <RiAdminLine /> Admin
+              </Link>
+            </>
+          ) : null
         ) : null}
       </div>
       <div className="nav-links">

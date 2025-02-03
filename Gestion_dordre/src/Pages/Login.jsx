@@ -25,7 +25,6 @@ function Login() {
         password,
       });
 
-      // Store everything in one cookie
       const data = {
         token: response.data.token,
         user: response.data.user,
@@ -57,9 +56,12 @@ function Login() {
               onChange={(e) => setUsername(e.target.value)}
               type="text"
               className="inp226"
+              id={error ? "redo" : null}
               placeholder=""
             />
-            <label className="lab55">Nom d'utilisateur</label>
+            <label className="lab55" id={error ? "redo1" : null}>
+              Nom d'utilisateur
+            </label>
           </div>
           <div className="inpu-lab22">
             <input
@@ -69,6 +71,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               type={passShow ? "text" : "password"}
               className="inp226"
+              id={error ? "redo" : null}
               placeholder=""
             />
             {passShow ? (
@@ -82,11 +85,11 @@ function Login() {
                 className="visible22"
               />
             )}
-            <label className="lab55">Mot de passe</label>
+            <label className="lab55" id={error ? "redo1" : null}>
+              Mot de passe
+            </label>
           </div>
           <input type="submit" value="LogIn" className="login-btn22" />
-
-          {error && <p className="error-message">{error}</p>}
 
           <Link className="back22" to="/">
             <TbArrowBackUp /> Retour à la page d'accueil

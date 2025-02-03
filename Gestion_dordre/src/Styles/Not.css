@@ -1,0 +1,13 @@
+.out33 {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  color: #00021d;
+  font-size: 1.1rem;
+}
+.hhlo33 {
+  font-size: 4rem;
+  color: #4d3d3d;
+}

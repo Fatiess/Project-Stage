@@ -20,3 +20,6 @@ main {
   align-items: center;
   gap: 2rem;
 }
+main button {
+  cursor: pointer;
+}

@@ -78,6 +78,7 @@ app.post("/arrivee", (req, res) => {
     exp: expediteur,
     obj: objet,
     nbr: numeroArr,
+    admin: admin,
   } = req.body;
 
   let filePath = null;
@@ -122,9 +123,10 @@ app.post("/arrivee", (req, res) => {
       date_lettre,
       date_darrivee,
       num_dordre_arrivee,
-      file_path
+      file_path,
+      creator
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
@@ -135,6 +137,7 @@ app.post("/arrivee", (req, res) => {
     dateDordre,
     numeroArr,
     filePath,
+    admin,
   ];
 
   db.query(insertArriveQuery, values, (err, result) => {
@@ -481,11 +484,11 @@ app.delete("/depart/:id", (req, res) => {
   });
 });
 
-// --------------------------------------------------------------
+// Users --------------------------------------------------------------
 app.post("/register", async (req, res) => {
   try {
     const { username, password, privileges } = req.body;
-    const hashedPassword = await hashPassword(password); // Hash the password
+    const hashedPassword = await hashPassword(password);
 
     const sql =
       "INSERT INTO users (username, password, privileges) VALUES (?, ?, ?)";
@@ -551,6 +554,84 @@ app.post("/login", async (req, res) => {
     console.error("Login error:", error);
     res.status(500).json({ error: "Server error" });
   }
+});
+
+app.put("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, password, privileges } = req.body;
+
+    let updateQuery;
+    let queryParams;
+
+    if (password) {
+      const hashedPassword = await hashPassword(password);
+      updateQuery = `
+        UPDATE users 
+        SET username = ?, 
+            password = ?, 
+            privileges = ? 
+        WHERE user_id = ?
+      `;
+      queryParams = [username, hashedPassword, privileges, id];
+    } else {
+      updateQuery = `
+        UPDATE users 
+        SET username = ?, 
+            privileges = ? 
+        WHERE user_id = ?
+      `;
+      queryParams = [username, privileges, id];
+    }
+
+    db.query(updateQuery, queryParams, (err, result) => {
+      if (err) {
+        console.error("Error updating user:", err);
+        return res.status(500).json({
+          error: "Error updating user",
+          details: err.message,
+        });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json({
+        message: "User updated successfully",
+        id: id,
+      });
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.get("/users", (req, res) => {
+  const sql = "SELECT user_id, username, privileges FROM users";
+  db.query(sql, (err, data) => {
+    if (err) {
+      console.error("Error fetching users:", err);
+      return res.status(500).json({
+        error: "Error fetching users",
+        details: err.message,
+      });
+    }
+    return res.json(data);
+  });
+});
+
+app.delete("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const deleteQuery = "DELETE FROM users WHERE user_id = ?";
+
+  db.query(deleteQuery, [id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (result.affectedRows === 0)
+      return res.status(404).json({ message: "User not found" });
+    res.status(200).json({ message: "User deleted successfully" });
+  });
 });
 
 app.listen(8887, "0.0.0.0", () => {

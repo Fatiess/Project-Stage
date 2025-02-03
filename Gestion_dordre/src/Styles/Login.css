@@ -69,6 +69,14 @@
   font-size: 1rem;
 }
 
+#redo {
+  border: 1px solid #e60000;
+}
+
+#redo1 {
+  color: #e60000;
+}
+
 .lab55 {
   position: absolute;
   left: 5rem;

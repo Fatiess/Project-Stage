@@ -1,0 +1,243 @@
+.admin {
+  width: 90%;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  margin-bottom: 2rem;
+  padding-bottom: 3rem;
+}
+
+.hed5874 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+.hed5874 span {
+  font-size: 1.8rem;
+  color: #001e51;
+  text-transform: uppercase;
+}
+
+.users {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.user-form {
+  width: 450px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.user-form h4 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  color: #001e51;
+}
+
+.user-form label {
+  color: #001e51;
+}
+
+.user-input1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.user-input15 {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.oku554 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.user-input335 {
+  width: 100%;
+  box-sizing: border-box;
+  height: 45px;
+  border-radius: 10px;
+  border: 1px solid #001e51;
+  padding-inline: 20px;
+  font-size: 1rem;
+  padding-right: 3.7rem;
+}
+
+.select-priv {
+  width: 150px;
+  box-sizing: border-box;
+  height: 45px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: 1px solid #001e51;
+  padding-inline: 20px;
+  font-size: 1rem;
+}
+
+.user-input445 {
+  width: 100%;
+  box-sizing: border-box;
+  height: 45px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 1px solid #001e51;
+  border-left: none;
+  padding-inline: 20px;
+  font-size: 1rem;
+}
+
+.add-bt887 {
+  width: 180px;
+  height: 40px;
+  border: none;
+  background-color: #5cb338;
+  color: #ffffff;
+  font-size: 1rem;
+  border-radius: 10px;
+  transition: all 300ms;
+  cursor: pointer;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+}
+
+.add-bt887:hover {
+  background-color: #001e51;
+  color: #fff;
+}
+
+.deto58 {
+  width: 60px;
+  height: 40px;
+  border: none;
+  background-color: #a90000;
+  color: #ffffff;
+  font-size: 1.3rem;
+  border-radius: 10px;
+  transition: all 300ms;
+  cursor: pointer;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+}
+
+.deto58:hover {
+  background-color: #c80000;
+  color: #fff;
+}
+
+.add-bt8877 {
+  width: 180px;
+  height: 40px;
+  border: none;
+  background-color: #001e51;
+  color: #ffffff;
+  font-size: 1rem;
+  border-radius: 10px;
+  transition: all 300ms;
+  cursor: pointer;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-bt8877:hover {
+  background-color: #5cb338;
+  color: #fff;
+}
+
+.add-bt884 {
+  width: 180px;
+  height: 40px;
+  border: 1px solid #001e51;
+  background-color: #ffffff;
+  color: #001e51;
+  font-size: 1rem;
+  border-radius: 10px;
+  transition: all 300ms;
+  cursor: pointer;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+}
+
+.add-bt884:hover {
+  background-color: #001e51;
+  color: #fff;
+}
+
+.vis2568 {
+  position: absolute;
+  bottom: 8px;
+  right: 20px;
+  font-size: 1.6rem;
+  color: #001e51;
+  cursor: pointer;
+}
+
+.users-list {
+  width: max-content;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.user-card {
+  width: 350px;
+  background-color: #fff;
+  border: 1px solid #cbcbcb;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  box-sizing: border-box;
+  border-radius: 15px;
+  padding: 1rem;
+  height: 160px;
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.user-card:hover {
+  scale: 1.05;
+}
+
+.user-card p {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  color: #505050;
+  font-weight: bold;
+}
+
+.user-card p span {
+  color: #001e51;
+}
+
+#sel58469 {
+  background-color: #c8dcff;
+}

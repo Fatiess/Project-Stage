@@ -165,6 +165,7 @@ function Arrivee(props) {
       formData.append("exp", exp);
       formData.append("num", num);
       formData.append("obj", obj);
+      formData.append("admin", user.user.user_id);
 
       // Ajouter le fichier s'il existe
       if (img) {
