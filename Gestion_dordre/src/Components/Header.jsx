@@ -57,7 +57,7 @@ function Header() {
             <>
               <span></span>
               <Link className="link" to="/admin">
-                <RiAdminLine /> Admin
+                <RiAdminLine /> Utilisateurs
               </Link>
             </>
           ) : null
